@@ -1,0 +1,16 @@
+{
+	"name": "qrdine",
+	"version": "1.0.0",
+	"description": "Restaurant order management makes easy.",
+	"main": "index.js",
+	"directories": {
+		"doc": "doc"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"dev": "docker compose --env-file ./apps/central-api/.env up --build"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}

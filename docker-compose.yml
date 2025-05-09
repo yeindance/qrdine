@@ -1,0 +1,30 @@
+services:
+  central-api:
+    container_name: central-api
+    build:
+      context: ./apps/central-api
+      dockerfile: Dockerfile
+    env_file:
+      - ./apps/central-api/.env # runtime env
+    ports: # need to pass env path when running `docker compose --env-file=`
+      - '${CENTRAL_API_PORT}:${CENTRAL_API_PORT}'
+    volumes:
+      - ./apps/central-api:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - postgres-db
+
+  postgres-db:
+    container_name: postgres-db
+    image: postgres
+    restart: always
+
+    ports:
+      - 5432:5432
+
+    environment:
+      POSTGRES_USER: '${CENTRAL_API_POSTGRES_DB_USER}'
+      POSTGRES_PASSWORD: '${CENTRAL_API_POSTGRES_DB_PWD}'
+      POSTGRES_DB: '${CENTRAL_API_POSTGRES_DB_NAME}'
+    # set shared memory limit when using docker compose
+    # shm_size: 128mb
