@@ -1,4 +1,8 @@
 {
+	"files.exclude": {
+		"**/node_modules": true,
+		"**/dist": true
+	},
 	"sqltools.connections": [
 		{
 			"previewLimit": 50,
