@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@db/*": ["src/db/*"],
-      "@graphql/*": ["src/graphql/*"]
+      "@graphql/*": ["src/graphql/*"],
+      "@config/*": ["src/config/*"]
     }
   }
 }

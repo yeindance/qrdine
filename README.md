@@ -9,3 +9,4 @@ Restaurant order management makes easy.
 ### development
 
 - run `npm run dev`
+- restart `docker compose` after making changes in .env
