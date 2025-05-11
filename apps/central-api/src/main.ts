@@ -1,12 +1,12 @@
-import { NestFactory } from '@nestjs/core'
-import { Module } from '@nestjs/common'
 import { DbModule } from '@db/db.module'
 import { MyGraphQLModule } from '@graphql/graphql.module'
-import { MyConfigModule } from './config/config.module'
+import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { NestFactory } from '@nestjs/core'
+import { MyConfigModule } from './config/config.module'
 
 @Module({
-  imports: [MyConfigModule, DbModule, MyGraphQLModule],
+  imports: [MyConfigModule.forRoot({}), DbModule, MyGraphQLModule],
 })
 class AppModule {}
 
@@ -19,13 +19,3 @@ async function bootstrap() {
   await app.listen(port)
 }
 void bootstrap()
-//  const em = this.dataSource.createEntityManager()
-
-//   // Path to your .sql file
-//   const sqlFilePath = join(__dirname, '../src/db/merchant-schema.sql')
-
-//   // Read the SQL file contents
-//   const sql = readFileSync(sqlFilePath, 'utf-8')
-
-//   // Run the SQL query with EntityManager
-//   // await em.query(sql)

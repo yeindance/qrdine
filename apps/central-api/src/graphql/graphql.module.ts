@@ -3,17 +3,14 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Global, Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
-import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { MenuListQueryResolver } from './query/MenuListQuery'
 import { MenuMutationResolver } from './mutation/MenuMutation'
-import { Menu } from '@db/entities'
+import { MenuListQueryResolver } from './query/MenuListQuery'
 
 @Global()
 @Module({
   providers: [MenuListQueryResolver, MenuMutationResolver],
   imports: [
-    TypeOrmModule.forFeature([Menu]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: false,

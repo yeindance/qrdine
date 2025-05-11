@@ -1,22 +1,9 @@
-import { Global, Module } from '@nestjs/common'
+import { DynamicModule, Global, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import * as _ from 'lodash'
+import { cwd } from 'process'
 
 import { z } from 'zod'
-
-// export const configSchema = z.object({
-//   app: z.object({ port: z.string() }),
-//   database: z.object({
-//     postgres: z.object({
-//       host: z.string(),
-//       user: z.string(),
-//       pwd: z.string(),
-//       name: z.string(),
-//       port: z.string(),
-//     }),
-//   }),
-// })
-
-// export type MyConfig = z.infer<typeof configSchema>
 
 const centralConfig = () => ({
   app: {
@@ -35,17 +22,36 @@ const centralConfig = () => ({
 
 const getEnv = (name: string) => process.env[name]
 
-// @Global()
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      load: [centralConfig],
-      // validate: () => {
-      //   const parsed = configSchema.safeParse(centralConfig())
-      //   if (!parsed.success) throw new Error(JSON.stringify(parsed.error.format()))
-      //   return parsed.data
-      // },
-    }),
-  ],
-})
-export class MyConfigModule {}
+interface IMyConfigModuleOptions {
+  overrides?: any
+}
+
+@Module({})
+export class MyConfigModule {
+  static forRoot(options: IMyConfigModuleOptions): DynamicModule {
+    return {
+      module: MyConfigModule,
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [() => _.merge({}, centralConfig(), options.overrides || {})],
+        }),
+      ],
+    }
+  }
+}
+
+// export const configSchema = z.object({
+//   app: z.object({ port: z.string() }),
+//   database: z.object({
+//     postgres: z.object({
+//       host: z.string(),
+//       user: z.string(),
+//       pwd: z.string(),
+//       name: z.string(),
+//       port: z.string(),
+//     }),
+//   }),
+// })
+
+// export type MyConfig = z.infer<typeof configSchema>

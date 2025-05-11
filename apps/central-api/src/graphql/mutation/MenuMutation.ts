@@ -1,18 +1,16 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-// import { MenuItemType } from 'src/db/models/MenuItem'
 import { BaseMutArgs, BaseMutation } from './BaseMutation'
 import { Menu, MenuType } from 'src/db/entities/MenuEntity'
 import { DataSource } from 'typeorm'
 import * as _ from 'lodash'
+import { DbService } from '@db/db.service'
 // import { HttpContextService } from 'src/services/HttpContextService'
 // import { faker } from '@faker-js/faker'
 
 @Resolver(() => MenuType)
 export class MenuMutationResolver extends BaseMutation {
-  constructor(dataSource: DataSource) {
-    super(dataSource)
-    // @InjectModel(MenuItem) private MenuItemModel: ReturnModelType<typeof MenuItem>,
-    // private contextService: HttpContextService,
+  constructor(private ds: DbService) {
+    super(ds)
   }
 
   @Mutation(() => MenuType, { name: 'MenuMutation' })

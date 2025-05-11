@@ -1,3 +1,4 @@
+import { DbService } from '@db/db.service'
 import { ArgsType, Field, ID } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
 import { DataSource, QueryRunner } from 'typeorm'
@@ -12,18 +13,15 @@ export class BaseMutArgs {
 }
 
 export class BaseMutation {
-  constructor(private dataSource: DataSource) {}
+  constructor(public dbService: DbService) {}
 
   async withTransaction(mutationFn: (q: QueryRunner) => any) {
-    const queryRunner = this.dataSource.createQueryRunner()
-
+    const queryRunner = this.dbService.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
     try {
       const result = await mutationFn(queryRunner)
-
       await queryRunner.commitTransaction()
-
       return result
     } catch (err) {
       // since we have errors lets rollback the changes we made
