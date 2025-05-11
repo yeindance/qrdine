@@ -12,27 +12,20 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
   constructor(private configService: ConfigService) {}
 
   async onModuleInit() {
-    this.switchDb()
-
-    if (!this.dataSource.isInitialized) await this.dataSource.initialize()
-
-    this.em = this.dataSource.createEntityManager()
+    await this.switchDb()
   }
 
   async onModuleDestroy() {
-    // console.log(await this.dataSource.query('SELECT current_database();'))
-    // return this.dataSource.createEntityManager()
     for (const [name, dataSource] of this.connections) {
       if (dataSource.isInitialized) await dataSource.destroy()
     }
-    console.log('>>>> Db service destroyed')
   }
 
   createQueryRunner() {
     return this.dataSource.createQueryRunner()
   }
 
-  switchDb(name?: string) {
+  async switchDb(name?: string) {
     const postgres = this.configService.get('database.postgres')
 
     const dbName: string = name || postgres.name
@@ -40,6 +33,7 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
 
     if (existingConnection) {
       this.dataSource = existingConnection
+      // if (!existingConnection.isInitialized) await existingConnection.initialize()
     } else {
       const dataSource = new DataSource({
         type: 'postgres',
@@ -51,8 +45,29 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
         synchronize: false,
         entities: [Menu],
       })
+      await dataSource.initialize()
+
       this.connections.set(dbName, dataSource)
       this.dataSource = dataSource
+      this.em = dataSource.createEntityManager()
+    }
+  }
+
+  // should not run this.switchDb inside since postgres does not support multi db transaction
+  async withTransaction(fn: (q: QueryRunner) => any) {
+    const queryRunner = this.createQueryRunner()
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
+    try {
+      const result = await fn(queryRunner)
+      await queryRunner.commitTransaction()
+      return result
+    } catch (err) {
+      // since we have errors lets rollback the changes we made
+      await queryRunner.rollbackTransaction()
+    } finally {
+      // you need to release a queryRunner which was manually instantiated
+      await queryRunner.release()
     }
   }
 }

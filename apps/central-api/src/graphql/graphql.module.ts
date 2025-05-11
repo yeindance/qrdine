@@ -6,18 +6,28 @@ import GraphQLJSON from 'graphql-type-json'
 
 import { MenuMutationResolver } from './mutation/MenuMutation'
 import { MenuListQueryResolver } from './query/MenuListQuery'
+import { DbService } from '@db/db.service'
 
 @Global()
 @Module({
   providers: [MenuListQueryResolver, MenuMutationResolver],
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      playground: false,
-      autoSchemaFile: true,
-      resolvers: { JSON: GraphQLJSON },
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      debug: true,
+      inject: [DbService],
+      useFactory(dbService: DbService) {
+        return {
+          playground: false,
+          autoSchemaFile: true,
+          resolvers: { JSON: GraphQLJSON },
+          plugins: [ApolloServerPluginLandingPageLocalDefault()],
+          debug: true,
+          context: async () => {
+            // TODO: dynamic switching based on req
+            await dbService.switchDb('kokofu')
+          },
+        }
+      },
     }),
   ],
 })

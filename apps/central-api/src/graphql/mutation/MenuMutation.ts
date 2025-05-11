@@ -14,11 +14,11 @@ export class MenuMutationResolver extends BaseMutation {
   }
 
   @Mutation(() => MenuType, { name: 'MenuMutation' })
-  async resolve(@Args() args: BaseMutArgs) {
+  resolve(@Args() args: BaseMutArgs) {
     const { id, values } = args
     const deletedAt = _.get(values, 'deletedAt')
 
-    return this.withTransaction(async (q) => {
+    return this.dbService.withTransaction(async (q) => {
       const menu = id ? await q.manager.findOneByOrFail(Menu, { id }) : q.manager.create(Menu)
 
       menu.fill(values)

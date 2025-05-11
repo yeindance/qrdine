@@ -1,21 +1,18 @@
-import { DynamicModule, Global, Module } from '@nestjs/common'
+import { DynamicModule, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import * as _ from 'lodash'
-import { cwd } from 'process'
-
-import { z } from 'zod'
 
 const centralConfig = () => ({
   app: {
-    port: getEnv('CENTRAL_API_PORT'),
+    port: getEnv('API_PORT'),
   },
   database: {
     postgres: {
-      host: getEnv('CENTRAL_API_DB_POSTGRES_HOST'),
-      user: getEnv('CENTRAL_API_DB_POSTGRES_USER'),
-      pwd: getEnv('CENTRAL_API_DB_POSTGRES_PWD'),
-      name: getEnv('CENTRAL_API_DB_POSTGRES_NAME'),
-      port: getEnv('CENTRAL_API_DB_POSTGRES_PORT'),
+      host: getEnv('DB_POSTGRES_HOST'),
+      user: getEnv('DB_POSTGRES_USER'),
+      pwd: getEnv('DB_POSTGRES_PWD'),
+      name: getEnv('DB_POSTGRES_DEFAULT_DB'),
+      port: getEnv('DB_POSTGRES_PORT'),
     },
   },
 })
