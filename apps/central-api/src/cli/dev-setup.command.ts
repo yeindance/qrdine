@@ -16,7 +16,7 @@ export class DevSetupCmd extends CommandRunner {
 
   async run(passedParam: string[], options?: CommandOptions): Promise<void> {
     try {
-      const centralSql = readFileSync(join(cwd(), '/src/db/sql/central-schema.sql'), 'utf-8')
+      const centralSql = readFileSync(join(cwd(), '/src/db/sql/hub-schema.sql'), 'utf-8')
       const merchantSql = readFileSync(join(cwd(), '/src/db/sql/merchant-schema.sql'), 'utf-8')
 
       const q = this.dbService.createQueryRunner()
@@ -47,7 +47,6 @@ export class DevSetupCmd extends CommandRunner {
     description: 'Drop if db already exists',
   })
   parseForce(val: string): boolean {
-    console.log({ val })
     return JSON.parse(val)
   }
 }

@@ -7,6 +7,7 @@ Restaurant order management makes easy.
 ### development
 
 - install docker
+- copy `.env.example` to `.env`
 - run `npm run dev`
 - run `npm run cli dev-setup` to setup databases
 - graphql playground is available at `http://{host}:{port}/graphql`

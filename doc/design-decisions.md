@@ -1,0 +1,2 @@
+- [2025-05-14] renamed `customer` to `seat` for clarity
+- [2025-05-14] put table names in double quotes`("table")` to escape reserved words

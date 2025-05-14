@@ -24,7 +24,9 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
   createQueryRunner() {
     return this.dataSource.createQueryRunner()
   }
-
+  /**
+   * Switch to a different database connection
+   */
   async switchDb(name?: string) {
     const postgres = this.configService.get('database.postgres')
 
@@ -33,7 +35,6 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
 
     if (existingConnection) {
       this.dataSource = existingConnection
-      // if (!existingConnection.isInitialized) await existingConnection.initialize()
     } else {
       const dataSource = new DataSource({
         type: 'postgres',
@@ -53,7 +54,9 @@ export class DbService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // should not run this.switchDb inside since postgres does not support multi db transaction
+  /**
+   * Note: `this.switchDb` should not be called inside since postgres does not support multi db transaction
+   */
   async withTransaction(fn: (q: QueryRunner) => any) {
     const queryRunner = this.createQueryRunner()
     await queryRunner.connect()

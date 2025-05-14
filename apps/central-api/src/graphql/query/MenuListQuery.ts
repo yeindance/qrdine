@@ -1,11 +1,8 @@
 import { Args, Query, Resolver } from '@nestjs/graphql'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
-import * as _ from 'lodash'
 
-import { BaseListArgs } from './BaseListQuery'
-import { Menu, MenuType } from '@db/entities'
 import { DbService } from '@db/db.service'
+import { Menu, MenuType } from '@db/entities'
+import { BaseListArgs } from './BaseListQuery'
 
 @Resolver(() => MenuType)
 export class MenuListQueryResolver {

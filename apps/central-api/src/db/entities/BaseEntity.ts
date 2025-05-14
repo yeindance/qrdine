@@ -11,6 +11,9 @@ import {
 } from 'typeorm'
 import { monotonicFactory } from 'ulid'
 
+/**
+ * Create Typeorm Entity Column and Graphql Type Field.
+ */
 export function ColumnField(prop: ColumnOptions, field: FieldOptions, graphqlReturnTypeFn: ReturnTypeFunc = () => String) {
   return function (target: object, propertyKey: string) {
     Column(prop)(target, propertyKey)
@@ -18,6 +21,9 @@ export function ColumnField(prop: ColumnOptions, field: FieldOptions, graphqlRet
   }
 }
 
+/**
+ * Create Typeorm Entity and Graphql Type.
+ */
 export function EntityObjectType(schema: EntityOptions = {}, object: ObjectTypeOptions & { name?: string } = {}) {
   return function (target: any) {
     Entity(schema)(target)

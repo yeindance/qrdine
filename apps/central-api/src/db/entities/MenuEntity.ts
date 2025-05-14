@@ -4,6 +4,9 @@ import { BaseEntity, ColumnField, EntityObjectType } from './BaseEntity'
 export class Menu extends BaseEntity {
   @ColumnField({ length: 50 }, {})
   name: string
+
+  @ColumnField({}, {})
+  available: boolean
 }
 
 export const MenuType = Menu
