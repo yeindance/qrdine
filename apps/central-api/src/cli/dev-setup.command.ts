@@ -19,22 +19,23 @@ export class DevSetupCmd extends CommandRunner {
       const centralSql = readFileSync(join(cwd(), '/src/db/sql/hub-schema.sql'), 'utf-8')
       const merchantSql = readFileSync(join(cwd(), '/src/db/sql/merchant-schema.sql'), 'utf-8')
 
-      const db = this.dbService.db()
+      const qr = await this.dbService.createQr('postgres')
       const createDb = async (dbName: string) => {
-        if (options?.force) await db.execute(`DROP DATABASE IF EXISTS ${dbName}`)
-        await db.execute(`CREATE DATABASE ${dbName}`)
+        if (options?.force) await qr.query(`DROP DATABASE IF EXISTS ${dbName}`)
+        await qr.query(`CREATE DATABASE ${dbName}`)
       }
 
       // create meta db
       await createDb('hub')
-      const centralDb = this.dbService.db('hub')
-      await centralDb.execute(centralSql)
+      const centralDb = await this.dbService.createQr('hub')
+      await centralDb.query(centralSql)
 
       // create a sample merchant db
       await createDb('kokofu')
-      const merchantDb = this.dbService.db('kokofu')
-      await merchantDb.execute(merchantSql)
+      const merchantDb = await this.dbService.createQr('kokofu')
+      await merchantDb.query(merchantSql)
       console.log('<--------- Dev setup completed 🥳 -------->')
+      return
     } catch (err) {
       console.error(err)
     }

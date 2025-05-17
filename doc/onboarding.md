@@ -6,6 +6,8 @@
 
 ## Database Overview
 
+![MVP](merchant-schema.png)
+
 - multi-tenant architecture (each merchant has its own database)
 
 ### `hub` database
@@ -17,5 +19,4 @@
 ### creating/modifying a table
 
 - create a sql file
-- create drizzle table
-- create graphql type
+- create a Typeorm entity (It also defines Graphql type)

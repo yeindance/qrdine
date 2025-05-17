@@ -1,3 +1,5 @@
+![MVP](doc/logo.svg)
+
 # QR Dine
 
 Restaurant order management makes easy.
@@ -17,3 +19,28 @@ Restaurant order management makes easy.
 
 - restart `docker compose` after making changes in .env
 - lodash default import doesn't work should be imported as `* as _`
+
+&nbsp;
+
+# Onboarding
+
+## glossary
+
+- **merchant**: a business that uses our platform to manage their products and orders
+
+## Database Overview
+
+![MVP](doc/merchant-schema.png)
+
+- multi-tenant architecture (each merchant has its own database)
+
+### `hub` database
+
+- stores metadata of all merchants
+
+## graphql and typeorm
+
+### creating/modifying a table
+
+- modify sql file
+- create a Typeorm entity (It also defines Graphql type)

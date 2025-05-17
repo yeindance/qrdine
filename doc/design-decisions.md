@@ -1,4 +1,5 @@
 - [2025-05-14] renamed `customer` to `seat` for clarity
 - [2025-05-14] put table names in double quotes`("table")` to escape reserved words
 - [2025-05-17] nestjs-cls module should be avoided in multi-tenancy architecture since it doesn't work in cli and queue workers
-- [2025-05-18] migrated to drizzle-orm for better performance and modern DX
+- [2025-05-17] migrated to drizzle-orm for better performance and modern DX
+- [2025-05-18] migrated back to typeorm for stability and better support
