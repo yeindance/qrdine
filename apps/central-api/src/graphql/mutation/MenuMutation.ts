@@ -1,35 +1,40 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { BaseMutArgs, BaseMutation } from './BaseMutation'
-import { Menu, MenuType } from 'src/db/entities/MenuEntity'
-import { DataSource } from 'typeorm'
-import * as _ from 'lodash'
 import { DbService } from '@db/db.service'
+import { Menu } from '@db/tables'
+import { MyGraphQlContext } from '@graphql/graphql.module'
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql'
+import * as _ from 'lodash'
+import { BaseMutArgs, BaseMutation } from './BaseMutation'
+import { MenuType } from '@graphql/type'
 // import { HttpContextService } from 'src/services/HttpContextService'
 // import { faker } from '@faker-js/faker'
 
 @Resolver(() => MenuType)
 export class MenuMutationResolver extends BaseMutation {
-  constructor(private ds: DbService) {
-    super(ds)
+  constructor(private dbService: DbService) {
+    super()
   }
 
   @Mutation(() => MenuType, { name: 'MenuMutation' })
-  resolve(@Args() args: BaseMutArgs) {
+  async resolve(@Args() args: BaseMutArgs, @Context() context: MyGraphQlContext) {
     const { id, values } = args
     const deletedAt = _.get(values, 'deletedAt')
 
-    return this.dbService.withTransaction(async (q) => {
-      const menu = id ? await q.manager.findOneByOrFail(Menu, { id }) : q.manager.create(Menu)
+    const db = this.dbService.db(context.merchantId)
+    const [result] = await db.insert(Menu).values(values).returning().execute()
 
-      menu.fill(values)
+    return result
+    // return this.dbService.withTransaction(async (q) => {
+    //   const menu = id ? await q.manager.findOneByOrFail(Menu, { id }) : q.manager.create(Menu)
 
-      if (deletedAt) {
-        await menu.softRemove()
-      } else {
-        await menu.save()
-      }
+    //   menu.fill(values)
 
-      return menu
-    })
+    //   if (deletedAt) {
+    //     await menu.softRemove()
+    //   } else {
+    //     await menu.save()
+    //   }
+
+    //   return menu
+    // })
   }
 }

@@ -6,7 +6,10 @@ import GraphQLJSON from 'graphql-type-json'
 
 import { MenuMutationResolver } from './mutation/MenuMutation'
 import { MenuListQueryResolver } from './query/MenuListQuery'
-import { DbService } from '@db/db.service'
+
+export interface MyGraphQlContext {
+  merchantId: string
+}
 
 @Global()
 @Module({
@@ -14,17 +17,18 @@ import { DbService } from '@db/db.service'
   imports: [
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      inject: [DbService],
-      useFactory(dbService: DbService) {
+      useFactory() {
         return {
           playground: false,
           autoSchemaFile: true,
           resolvers: { JSON: GraphQLJSON },
           plugins: [ApolloServerPluginLandingPageLocalDefault()],
           debug: true,
-          context: async () => {
-            // TODO: dynamic switching based on req
-            await dbService.switchDb('kokofu')
+          context: (): MyGraphQlContext => {
+            // TODO: retrieve merchantId from req
+            return {
+              merchantId: 'kokofu',
+            }
           },
         }
       },

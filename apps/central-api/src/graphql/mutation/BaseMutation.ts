@@ -1,7 +1,5 @@
-import { DbService } from '@db/db.service'
 import { ArgsType, Field, ID } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
-import { DataSource, QueryRunner } from 'typeorm'
 
 @ArgsType()
 export class BaseMutArgs {
@@ -13,5 +11,5 @@ export class BaseMutArgs {
 }
 
 export class BaseMutation {
-  constructor(public dbService: DbService) {}
+  // constructor(public dbService: DbService) {}
 }

@@ -11,3 +11,11 @@
 ### `hub` database
 
 - stores metadata about all merchants
+
+## graphql and drizzle-orm
+
+### creating/modifying a table
+
+- create a sql file
+- create drizzle table
+- create graphql type

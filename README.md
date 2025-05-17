@@ -11,6 +11,7 @@ Restaurant order management makes easy.
 - run `npm run dev`
 - run `npm run cli dev-setup` to setup databases
 - graphql playground is available at `http://{host}:{port}/graphql`
+- please read onboarding.md for more details
 
 ### note
 

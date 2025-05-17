@@ -1,17 +1,22 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
 import { DbService } from '@db/db.service'
-import { Menu, MenuType } from '@db/entities'
-import { BaseListArgs } from './BaseListQuery'
+import { Menu } from '@db/tables'
+import { MyGraphQlContext } from '@graphql/graphql.module'
+import { MenuType } from '@graphql/type'
+import { Args, Context, Query, Resolver } from '@nestjs/graphql'
+import { BaseListArgs, BaseListQuery } from './BaseListQuery'
 
 @Resolver(() => MenuType)
-export class MenuListQueryResolver {
-  constructor(private dbService: DbService) {}
+export class MenuListQueryResolver extends BaseListQuery {
+  constructor(private dbService: DbService) {
+    super(Menu)
+  }
 
   @Query(() => [MenuType], { name: 'MenuList' })
-  async resolve(@Args() args: BaseListArgs) {
+  async resolve(@Args() args: BaseListArgs, @Context() context: MyGraphQlContext) {
     const { where } = args
 
-    return this.dbService.em.find(Menu, { where })
+    const db = this.dbService.db(context.merchantId)
+
+    return db.select().from(Menu).where(this.buildWhereFilter(where))
   }
 }

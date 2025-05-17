@@ -20,7 +20,8 @@
     "paths": {
       "@db/*": ["src/db/*"],
       "@graphql/*": ["src/graphql/*"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@shared/*": ["src/shared/*"]
     }
   }
 }

@@ -1,6 +1,6 @@
 import { DbService } from '@db/db.service'
-import { Command, CommandRunner, Option } from 'nest-commander'
 import { readFileSync } from 'fs'
+import { Command, CommandRunner, Option } from 'nest-commander'
 import { join } from 'path'
 import { cwd } from 'process'
 
@@ -19,23 +19,21 @@ export class DevSetupCmd extends CommandRunner {
       const centralSql = readFileSync(join(cwd(), '/src/db/sql/hub-schema.sql'), 'utf-8')
       const merchantSql = readFileSync(join(cwd(), '/src/db/sql/merchant-schema.sql'), 'utf-8')
 
-      const q = this.dbService.createQueryRunner()
+      const db = this.dbService.db()
       const createDb = async (dbName: string) => {
-        if (options?.force) await q.query(`DROP DATABASE IF EXISTS ${dbName}`)
-        await q.query(`CREATE DATABASE ${dbName}`)
+        if (options?.force) await db.execute(`DROP DATABASE IF EXISTS ${dbName}`)
+        await db.execute(`CREATE DATABASE ${dbName}`)
       }
 
       // create meta db
       await createDb('hub')
-      await this.dbService.switchDb('hub')
-      const centralQ = this.dbService.createQueryRunner()
-      await centralQ.query(centralSql)
+      const centralDb = this.dbService.db('hub')
+      await centralDb.execute(centralSql)
 
       // create a sample merchant db
       await createDb('kokofu')
-      await this.dbService.switchDb('kokofu')
-      const merchantQ = this.dbService.createQueryRunner()
-      await merchantQ.query(merchantSql)
+      const merchantDb = this.dbService.db('kokofu')
+      await merchantDb.execute(merchantSql)
       console.log('<--------- Dev setup completed 🥳 -------->')
     } catch (err) {
       console.error(err)
