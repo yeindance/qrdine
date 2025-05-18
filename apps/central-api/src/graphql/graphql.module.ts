@@ -6,6 +6,10 @@ import GraphQLJSON from 'graphql-type-json'
 
 import { MenuMutationResolver } from './mutation/MenuMutation'
 import { MenuListQueryResolver } from './query/MenuListQuery'
+import { SeatMutationResolver } from './mutation/SeatMutation'
+import { StaffMutationResolver } from './mutation/StaffMutation'
+import { SeatListQueryResolver } from './query/SeatListQuery'
+import { StaffListQueryResolver } from './query/StaffListQuery'
 
 export interface MyGraphQlContext {
   merchantId: string
@@ -13,7 +17,14 @@ export interface MyGraphQlContext {
 
 @Global()
 @Module({
-  providers: [MenuListQueryResolver, MenuMutationResolver],
+  providers: [
+    MenuListQueryResolver,
+    MenuMutationResolver,
+    SeatListQueryResolver,
+    SeatMutationResolver,
+    StaffListQueryResolver,
+    StaffMutationResolver,
+  ],
   imports: [
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,

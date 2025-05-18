@@ -1,7 +1,7 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DataSource, EntityManager } from 'typeorm'
-import { Menu } from './entities'
+import { Menu, Order, OrderMenuItem, Seat, Staff } from './entities'
 
 @Injectable()
 export class DbService implements OnModuleDestroy {
@@ -31,7 +31,7 @@ export class DbService implements OnModuleDestroy {
         username: postgres.user,
         password: postgres.pwd,
         database: dbName,
-        entities: [Menu],
+        entities: [Menu, OrderMenuItem, Order, Seat, Staff],
         synchronize: false,
       })
       await dataSource.initialize()
