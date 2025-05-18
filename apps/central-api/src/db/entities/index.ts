@@ -1,1 +1,5 @@
 export * from './MenuEntity'
+export * from './OrderEntity'
+export * from './OrderMenutItemEntity'
+export * from './SeatEntity'
+export * from './StaffEntity'
