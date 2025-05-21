@@ -1,6 +1,6 @@
 import { OneToMany } from 'typeorm'
 import { BaseEntity, ColumnField, EntityObjectType } from './BaseEntity'
-import { OrderMenuItem } from './OrderMenutItemEntity'
+import { OrderItem } from './OrderItemEntity'
 
 @EntityObjectType({ name: 'menu' }, { name: 'MenuType' })
 export class Menu extends BaseEntity {
@@ -13,8 +13,8 @@ export class Menu extends BaseEntity {
   @ColumnField({}, {})
   available: boolean
 
-  @OneToMany(() => OrderMenuItem, (orderMenuItem) => orderMenuItem.menu)
-  orderMenuItems: OrderMenuItem[]
+  @OneToMany(() => OrderItem, (orderMenuItem) => orderMenuItem.menu)
+  orderMenuItems: OrderItem[]
 }
 
 export const MenuType = Menu

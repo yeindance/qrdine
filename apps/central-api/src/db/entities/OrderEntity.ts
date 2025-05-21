@@ -1,7 +1,7 @@
 import { ManyToOne, OneToMany } from 'typeorm'
 import { BaseEntity, ColumnField, EntityObjectType } from './BaseEntity'
 import { Staff } from './StaffEntity'
-import { OrderMenuItem } from './OrderMenutItemEntity'
+import { OrderItem } from './OrderItemEntity'
 
 @EntityObjectType({ name: 'order' }, { name: 'OrderType' })
 export class Order extends BaseEntity {
@@ -20,6 +20,6 @@ export class Order extends BaseEntity {
   @ManyToOne(() => Staff)
   staff: Staff
 
-  @OneToMany(() => OrderMenuItem, (orderMenuItem) => orderMenuItem.order)
-  orderMenuItems: OrderMenuItem[]
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  orderMenuItems: OrderItem[]
 }
