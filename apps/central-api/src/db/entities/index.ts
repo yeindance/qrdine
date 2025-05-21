@@ -1,5 +1,5 @@
 export * from './MenuEntity'
 export * from './OrderEntity'
-export * from './OrderMenutItemEntity'
+export * from './OrderItemEntity'
 export * from './SeatEntity'
 export * from './StaffEntity'

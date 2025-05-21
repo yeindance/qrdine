@@ -53,6 +53,7 @@ CREATE TABLE "order_item" (
   id CHAR(26) PRIMARY KEY,
 
   status VARCHAR(10) NOT NULL,
+  quantity INT DEFAULT 1 NOT NULL,
 
   menu_id CHAR(26) NOT NULL,
   order_id CHAR(26) NOT NULL,
