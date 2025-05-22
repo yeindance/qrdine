@@ -7,7 +7,7 @@ import { Staff } from '@db/entities'
 @Resolver(() => Staff)
 export class StaffListQueryResolver extends BaseListQuery {
   constructor(private dbService: DbService) {
-    super(Staff)
+    super()
   }
 
   @Query(() => [Staff], { name: 'StaffList' })

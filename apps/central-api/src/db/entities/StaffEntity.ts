@@ -5,3 +5,5 @@ export class Staff extends BaseEntity {
   @ColumnField({ length: 50 }, {})
   name: string
 }
+
+export const StaffType = Staff

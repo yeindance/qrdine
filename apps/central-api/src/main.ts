@@ -6,9 +6,9 @@ import { NestFactory } from '@nestjs/core'
 import { MyConfigModule } from './config/config.module'
 
 @Module({
-  imports: [MyConfigModule.forRoot({}), DbModule, MyGraphQLModule],
+  imports: [MyConfigModule.forRoot({ envPath: '.env' }), DbModule, MyGraphQLModule],
 })
-class AppModule {}
+export class AppModule {}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

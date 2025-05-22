@@ -23,3 +23,5 @@ export class Order extends BaseEntity {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderMenuItems: OrderItem[]
 }
+
+export const OrderType = Order

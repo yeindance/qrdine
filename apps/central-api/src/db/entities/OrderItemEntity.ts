@@ -33,3 +33,5 @@ export class OrderItem extends BaseEntity {
   @JoinColumn({ name: 'seatId' })
   seat: Seat
 }
+
+export const OrderItemType = OrderItem
