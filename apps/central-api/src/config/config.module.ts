@@ -2,7 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import * as _ from 'lodash'
 
-const centralConfig = () => ({
+export const centralConfig = () => ({
   app: {
     port: getEnv('API_PORT'),
   },
@@ -21,6 +21,7 @@ const getEnv = (name: string) => process.env[name]
 
 interface IMyConfigModuleOptions {
   overrides?: any
+  envPath?: string
 }
 
 @Module({})
@@ -31,6 +32,7 @@ export class MyConfigModule {
       imports: [
         ConfigModule.forRoot({
           isGlobal: true,
+          envFilePath: options.envPath || '.env',
           load: [() => _.merge({}, centralConfig(), options.overrides || {})],
         }),
       ],

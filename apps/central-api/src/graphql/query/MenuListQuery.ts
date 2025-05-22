@@ -1,13 +1,13 @@
 import { DbService } from '@db/db.service'
+import { Menu, MenuType } from '@db/entities'
 import { MyGraphQlContext } from '@graphql/graphql.module'
 import { Args, Context, Query, Resolver } from '@nestjs/graphql'
 import { BaseListArgs, BaseListQuery } from './BaseListQuery'
-import { Menu, MenuType } from '@db/entities'
 
 @Resolver(() => MenuType)
 export class MenuListQueryResolver extends BaseListQuery {
   constructor(private dbService: DbService) {
-    super(Menu)
+    super()
   }
 
   @Query(() => [MenuType], { name: 'MenuList' })
