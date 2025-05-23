@@ -38,7 +38,7 @@ describe('MenuMutationTest', () => {
       const values = { name: 'Cabbage', price: 350.4 }
       await mutation.resolve({ values }, { merchantId: db })
       const updatedValues = { name: 'Cabbage Raw', price: 400 }
-      const updatedMenu = await mutation.resolve({ values: updatedValues }, { merchantId: 'kokofu' })
+      const updatedMenu = await mutation.resolve({ values: updatedValues }, { merchantId: db })
       expect(updatedMenu).toMatchObject(updatedValues)
     })
   })
