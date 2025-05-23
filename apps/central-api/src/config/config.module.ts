@@ -2,7 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import * as _ from 'lodash'
 
-export const centralConfig = () => ({
+const centralConfig = () => ({
   app: {
     port: getEnv('API_PORT'),
   },
