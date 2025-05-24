@@ -1,37 +1,39 @@
-import { BaseEntity, ColumnField, EntityObjectType } from './BaseEntity'
 import { JoinColumn, ManyToOne } from 'typeorm'
-import { Order } from './OrderEntity'
+import { BaseEntity, ColumnField, EntityObjectType } from './BaseEntity'
 import { Menu } from './MenuEntity'
-import { Seat } from './SeatEntity'
+import { Order } from './OrderEntity'
+
+export enum OrderItemStatusEnum {
+  draft = 'draft',
+  confirmed = 'confirmed',
+  canceled = 'canceled',
+  fulfilled = 'fulfilled',
+}
 
 @EntityObjectType({ name: 'order_item' }, { name: 'OrderItemType' })
 export class OrderItem extends BaseEntity {
-  @ColumnField({ length: 20 }, {})
-  status: string // e.g., 'draft', 'confirmed', 'canceled', 'fulfilled'
+  @ColumnField({ type: 'varchar', length: 10 }, {})
+  status: OrderItemStatusEnum
 
-  @ColumnField({ type: 'int', default: 1 }, { description: 'Quantity of this menu item ordered' })
+  @ColumnField({ type: 'int' }, {})
   quantity: number
 
-  @ColumnField({ nullable: false }, {})
+  @ColumnField({ name: 'menu_price', type: 'decimal', precision: 2, default: null }, {})
+  menuPrice: number
+
+  @ColumnField({ nullable: false, name: 'order_id' }, {})
   orderId: string
 
-  @ColumnField({ nullable: false }, {})
+  @ColumnField({ nullable: false, name: 'menu_id' }, {})
   menuId: string
 
-  @ColumnField({ nullable: false }, {})
-  seatId: string
-
-  @ManyToOne(() => Order, (order) => order.orderMenuItems)
-  @JoinColumn({ name: 'orderId' })
+  @ManyToOne(() => Order, (order) => order.orderItems)
+  @JoinColumn({ name: 'order_id' })
   order: Order
 
   @ManyToOne(() => Menu, (menu) => menu.orderMenuItems)
-  @JoinColumn({ name: 'menuId' })
+  @JoinColumn({ name: 'menu_id' })
   menu: Menu
-
-  @ManyToOne(() => Seat, (seat) => seat.orderMenuItems)
-  @JoinColumn({ name: 'seatId' })
-  seat: Seat
 }
 
 export const OrderItemType = OrderItem

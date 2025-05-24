@@ -3,3 +3,7 @@
 - [2025-05-17] nestjs-cls module should be avoided in multi-tenancy architecture since it doesn't work in cli and queue workers
 - [2025-05-17] migrated to drizzle-orm for better performance and modern DX
 - [2025-05-18] migrated back to typeorm for stability and better support
+- [2025-05-23] stopped writing jest test cases as it is slowing down development
+- [2025-05-23] make order.seat_id nullable as qr may be generated in advance before assigning to a table in real-world scenario
+- [2025-05-24] add constraint `UNIQUE (user_id, role_id)` to order_item to ensure no duplicate menu in one order
+- [2025-05-25] integrate zod for inline-validation

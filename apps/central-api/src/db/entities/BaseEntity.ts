@@ -3,6 +3,7 @@ import {
   Column,
   ColumnOptions,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   EntityOptions,
   PrimaryColumn,
@@ -47,11 +48,11 @@ export class BaseEntity extends TypeormBaseEntity {
   @Field()
   updatedAt: Date
 
-  @Column({ name: 'deleted_at' })
+  @DeleteDateColumn({ name: 'deleted_at' })
   @Field({ nullable: true })
   deletedAt: Date
 
-  fill(values: any) {
+  fill(values: Partial<this>) {
     Object.assign(this, values)
   }
 }

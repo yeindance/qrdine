@@ -35,10 +35,10 @@ CREATE TABLE "order" (
   id CHAR(26) PRIMARY KEY,
 
   name VARCHAR(50) NOT NULL,
-  total DECIMAL(10, 2) NOT NULL,
+  total DECIMAL(10, 2) DEFAULT 0,
   paid DECIMAL(10, 2) DEFAULT NULL,
 
-  seat_id CHAR(26) NOT NULL,
+  seat_id CHAR(26),
   staff_id CHAR(26) NOT NULL,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -53,9 +53,10 @@ CREATE TABLE "order_item" (
   id CHAR(26) PRIMARY KEY,
 
   status VARCHAR(10) NOT NULL,
-  quantity INT DEFAULT 1 NOT NULL,
+  quantity INT NOT NULL,
 
   menu_id CHAR(26) NOT NULL,
+  menu_price DECIMAL(10,2) NOT NULL,
   order_id CHAR(26) NOT NULL,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -63,6 +64,7 @@ CREATE TABLE "order_item" (
   deleted_at TIMESTAMP DEFAULT NULL,
 
   FOREIGN KEY (menu_id) REFERENCES "menu"(id),
-  FOREIGN KEY (order_id) REFERENCES "order"(id)
-);
+  FOREIGN KEY (order_id) REFERENCES "order"(id),
 
+  UNIQUE (menu_id, order_id)
+);

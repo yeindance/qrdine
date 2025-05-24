@@ -19,6 +19,7 @@ Restaurant order management makes easy.
 
 - restart `docker compose` after making changes in .env
 - lodash default import doesn't work should be imported as `* as _`
+- typeorm @Column default does not set default value
 
 &nbsp;
 
