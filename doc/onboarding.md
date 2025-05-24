@@ -20,3 +20,7 @@
 
 - create a sql file
 - create a Typeorm entity (It also defines Graphql type)
+
+### architecture overview
+
+- this system use one order per session/table approach

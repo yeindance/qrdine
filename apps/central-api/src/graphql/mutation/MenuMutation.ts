@@ -16,10 +16,9 @@ export class MenuMutationResolver extends BaseMutation {
     const { id, values } = args
     const deletedAt = _.get(values, 'deletedAt')
 
-    const em = await this.dbService.createEm(context.merchantId)
-
     return this.dbService.withTransaction(context.merchantId, async (db) => {
       const menu = id ? await db.findOneByOrFail(Menu, { id }) : db.create(Menu)
+      console.log({ values })
 
       menu.fill(values)
 
@@ -28,6 +27,7 @@ export class MenuMutationResolver extends BaseMutation {
       } else {
         await menu.save()
       }
+      console.log(values)
 
       return menu
     })

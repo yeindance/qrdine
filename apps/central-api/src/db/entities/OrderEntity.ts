@@ -1,27 +1,38 @@
-import { ManyToOne, OneToMany } from 'typeorm'
+import { JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { BaseEntity, ColumnField, EntityObjectType } from './BaseEntity'
 import { Staff } from './StaffEntity'
 import { OrderItem } from './OrderItemEntity'
+import { Seat } from './SeatEntity'
+import { Field } from '@nestjs/graphql'
 
 @EntityObjectType({ name: 'order' }, { name: 'OrderType' })
 export class Order extends BaseEntity {
   @ColumnField({ length: 100 }, {})
   name: string
 
-  @ColumnField({ type: 'float' }, {})
+  @ColumnField({ type: 'decimal', precision: 2, default: 0 }, { nullable: true })
   total: number
 
-  @ColumnField({ type: 'boolean', default: false }, {})
-  paid: boolean
+  @ColumnField({ type: 'decimal', precision: 2, default: null }, { nullable: true })
+  paid: number
 
-  @ColumnField({ nullable: true }, {})
+  @ColumnField({ name: 'staff_id' }, {})
   staffId: string
 
+  @ColumnField({ name: 'seat_id' }, {})
+  seatId: string
+
   @ManyToOne(() => Staff)
+  @JoinColumn({ name: 'staff_id' })
   staff: Staff
 
+  @ManyToOne(() => Staff)
+  @JoinColumn({ name: 'seat_id' })
+  seat: Seat
+
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
-  orderMenuItems: OrderItem[]
+  @Field(() => [OrderItem])
+  orderItems: OrderItem[]
 }
 
 export const OrderType = Order

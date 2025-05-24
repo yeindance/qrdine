@@ -5,14 +5,17 @@ import { GraphQLModule } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
 
 import { MenuMutationResolver } from './mutation/MenuMutation'
-import { MenuListQueryResolver } from './query/MenuListQuery'
+import { OrderMutationResolver } from './mutation/OrderMutation'
 import { SeatMutationResolver } from './mutation/SeatMutation'
 import { StaffMutationResolver } from './mutation/StaffMutation'
+import { MenuListQueryResolver } from './query/MenuListQuery'
+import { OrderListQueryResolver } from './query/OrderListQuery'
 import { SeatListQueryResolver } from './query/SeatListQuery'
 import { StaffListQueryResolver } from './query/StaffListQuery'
 
 export interface MyGraphQlContext {
   merchantId: string
+  staffId: string
 }
 
 @Global()
@@ -24,6 +27,8 @@ export interface MyGraphQlContext {
     SeatMutationResolver,
     StaffListQueryResolver,
     StaffMutationResolver,
+    OrderMutationResolver,
+    OrderListQueryResolver,
   ],
   imports: [
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
@@ -39,6 +44,7 @@ export interface MyGraphQlContext {
             // TODO: retrieve merchantId from req
             return {
               merchantId: 'kokofu',
+              staffId: '01JVYZE7P5H7ZBYCH6BMN87TMC',
             }
           },
         }

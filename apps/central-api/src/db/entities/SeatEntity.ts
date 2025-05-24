@@ -7,8 +7,8 @@ export class Seat extends BaseEntity {
   @ColumnField({ length: 50 }, {})
   name: string
 
-  @OneToMany(() => OrderItem, (orderMenuItem) => orderMenuItem.seat)
-  orderMenuItems: OrderItem[]
+  // @OneToMany(() => OrderItem, (orderItem) => orderItem.seat)
+  // orderItems: OrderItem[]
 }
 
 export const SeatType = Seat

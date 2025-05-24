@@ -1,7 +1,8 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable, OnModuleDestroy } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { DataSource, EntityManager } from 'typeorm'
+import { DataSource, EntityManager, TypeORMError } from 'typeorm'
 import { Menu, Order, OrderItem, Seat, Staff } from './entities'
+import { GqlValidationEx } from '@shared/exceptions'
 
 @Injectable()
 export class DbService implements OnModuleDestroy {
@@ -49,9 +50,13 @@ export class DbService implements OnModuleDestroy {
       const result = await fn(queryRunner.manager)
       await queryRunner.commitTransaction()
       return result
-    } catch (err) {
+    } catch (err: any) {
       // since we have errors lets rollback the changes we made
       await queryRunner.rollbackTransaction()
+      // if (err instanceof GqlValidationEx) {
+      //   throw err
+      // }
+      throw new HttpException(err, HttpStatus.BAD_REQUEST)
     } finally {
       // you need to release a queryRunner which was manually instantiated
       await queryRunner.release()

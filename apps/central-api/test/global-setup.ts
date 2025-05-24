@@ -1,3 +1,5 @@
+import { Staff } from '../src/db/entities'
+import { TestApp } from '../src/graphql/tests/utils.spec'
 import * as dotenv from 'dotenv'
 import { readFileSync } from 'fs'
 import { join } from 'path'
@@ -20,6 +22,7 @@ const getDb = async (dbName?: string) => {
     database: dbName,
     // database: getEnv('DB_POSTGRES_DEFAULT_DB'),
     // entities: [Menu, OrderItem, Order, Seat, Staff],
+    entities: [Staff],
     synchronize: false,
   })
   await dataSource.initialize()
@@ -41,6 +44,10 @@ const main = async () => {
   const merchantDb = await getDb(testDb)
   const merchantQr = merchantDb.createQueryRunner()
   await merchantQr.query(merchantSql)
+
+  const em = merchantDb.createEntityManager()
+  const staff = await em.save(Staff, { name: 'Manager' })
+  TestApp.staffId = staff.id
 
   await postgresDb.destroy()
   await merchantDb.destroy()

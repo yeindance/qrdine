@@ -34,6 +34,8 @@ export class DevSetupCmd extends CommandRunner {
       await createDb('kokofu')
       const merchantDb = await this.dbService.createQr('kokofu')
       await merchantDb.query(merchantSql)
+
+      await merchantDb.query(`INSERT INTO staff (id, name) VALUES ($1, $2)`, ['01JVYZE7P5H7ZBYCH6BMN87TMC', 'Manager'])
       console.log('<--------- Dev setup completed 🥳 -------->')
       return
     } catch (err) {
