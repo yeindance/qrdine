@@ -26,7 +26,7 @@ export class Order extends BaseEntity {
   @JoinColumn({ name: 'staff_id' })
   staff: Staff
 
-  @ManyToOne(() => Staff)
+  @ManyToOne(() => Seat)
   @JoinColumn({ name: 'seat_id' })
   seat: Seat
 

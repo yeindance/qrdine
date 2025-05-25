@@ -53,12 +53,11 @@ export class DbService implements OnModuleDestroy {
     } catch (err: any) {
       // since we have errors lets rollback the changes we made
       await queryRunner.rollbackTransaction()
-      // if (err instanceof GqlValidationEx) {
-      //   throw err
-      // }
+      if (err instanceof GqlValidationEx) {
+        throw err
+      }
       throw new HttpException(err, HttpStatus.BAD_REQUEST)
     } finally {
-      // you need to release a queryRunner which was manually instantiated
       await queryRunner.release()
     }
   }
