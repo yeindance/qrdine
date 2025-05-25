@@ -24,7 +24,7 @@ export class BaseMutation {
   }
 
   async findOneOrCreate<T>(db: EntityManager, entity: EntityTarget<any>, options: FindOneOptions): Promise<T> {
-    const where = options.where as any
+    const where = options.where as Record<string, any>
     return where.id ? await db.findOneOrFail(entity, options) : db.create(entity)
   }
 }
