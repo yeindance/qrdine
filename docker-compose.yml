@@ -34,3 +34,24 @@ services:
       POSTGRES_USER: '${DB_POSTGRES_USER}'
       POSTGRES_PASSWORD: '${DB_POSTGRES_PWD}'
       POSTGRES_DB: '${DB_POSTGRES_DEFAULT_DB}'
+
+  # -------------- menu-order-web --------------
+  menu-order-web:
+    container_name: menu-order-web
+
+    build:
+      context: ./apps/menu-order-web
+      dockerfile: Dockerfile
+
+    env_file:
+      - ./apps/central-api/.env # runtime env
+
+    ports:
+      - '${MENU_ORDER_WEB_PORT}:${MENU_ORDER_WEB_PORT}'
+
+    volumes:
+      - ./apps/menu-order-web:/app
+      - /app/node_modules
+
+    depends_on:
+      - central-api

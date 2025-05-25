@@ -11,15 +11,17 @@ import { BaseMutArgs, BaseMutation } from './BaseMutation'
 
 const valuesSchema = z.object({
   deletedAt: z.boolean().optional(),
-  orderItems: z.array(
-    z.object({
-      id: z.string().optional(),
-      deletedAt: z.boolean().optional(),
-      menuId: z.string(),
-      quantity: z.number(),
-      orderId: z.string().optional(),
-    }),
-  ),
+  orderItems: z
+    .array(
+      z.object({
+        id: z.string().optional(),
+        deletedAt: z.boolean().optional(),
+        menuId: z.string(),
+        quantity: z.number(),
+        orderId: z.string().optional(),
+      }),
+    )
+    .optional(),
 })
 
 type TValues = z.infer<typeof valuesSchema>
@@ -35,7 +37,7 @@ export class OrderMutationResolver extends BaseMutation {
   async resolve(@Args() args: BaseMutArgs, @Context() context: MyGraphQlContext) {
     this.validate(args.values, valuesSchema)
 
-    const { deletedAt, ...values } = args.values as TValues
+    const { deletedAt, orderItems, ...values } = args.values as TValues
     const { id } = args
 
     return this.dbService.withTransaction(context.merchantId, async (db) => {
@@ -44,14 +46,14 @@ export class OrderMutationResolver extends BaseMutation {
 
       if (id && deletedAt) return await order.softRemove()
 
-      order.fill(_.omit(values, 'orderItems'))
+      order.fill(values)
       order.staffId = context.staffId
 
       await order.save()
       const updatedOrder = await this.db.findOneOrFail(Order, { where: { id: order.id }, relations: { orderItems: true } })
 
-      if (values.orderItems.length) {
-        await this.saveOrderItems(updatedOrder, values.orderItems)
+      if (orderItems?.length) {
+        await this.saveOrderItems(updatedOrder, orderItems)
       }
 
       return updatedOrder
