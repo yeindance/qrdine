@@ -51,12 +51,20 @@ export class DbService implements OnModuleDestroy {
       await queryRunner.commitTransaction()
       return result
     } catch (err: any) {
-      // since we have errors lets rollback the changes we made
       await queryRunner.rollbackTransaction()
+
+      // Re-throw validation errors without wrapping
       if (err instanceof GqlValidationEx) {
         throw err
       }
-      throw new HttpException(err, HttpStatus.BAD_REQUEST)
+
+      // Wrap database errors appropriately
+      if (err instanceof TypeORMError) {
+        throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+      }
+
+      // Default to bad request for unknown errors
+      throw new HttpException(err.message || err, HttpStatus.BAD_REQUEST)
     } finally {
       await queryRunner.release()
     }
