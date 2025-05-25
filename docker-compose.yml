@@ -44,7 +44,7 @@ services:
       dockerfile: Dockerfile
 
     env_file:
-      - ./apps/menu-order-web/.env # runtime env
+      - ./apps/central-api/.env # runtime env
 
     ports:
       - '${MENU_ORDER_WEB_PORT}:${MENU_ORDER_WEB_PORT}'
